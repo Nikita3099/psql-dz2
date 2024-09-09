@@ -117,25 +117,30 @@ SELECT title
 FROM Track
 WHERE title ILIKE '%мой%' OR title ILIKE '%my%';
 
+-- Тут необходимо использовать вложенный запрос и функцию MAX
 SELECT title, duration
 FROM Track
 WHERE duration = (SELECT MAX(duration) FROM Track);
 
+-- Количество исполнителей в каждом жанре
 SELECT g.name AS genre_name, COUNT(ag.artist_id) AS artist_count
 FROM Genre g
 JOIN Artist_Genre ag ON g.id = ag.genre_id
 GROUP BY g.name;
 
+-- Количество треков, вошедших в альбомы 2019–2020 годов
 SELECT COUNT(t.id) AS track_count
 FROM Track t
 JOIN Album a ON t.album_id = a.id
 WHERE a.release_year BETWEEN 2019 AND 2020;
 
+-- Средняя продолжительность треков по каждому альбому
 SELECT a.title AS album_title, AVG(t.duration) AS average_duration
 FROM Album a
 JOIN Track t ON a.id = t.album_id
 GROUP BY a.title;
 
+-- Все исполнители, которые не выпустили альбомы в 2020 году
 SELECT ar.name AS artist_name
 FROM Artist ar
 WHERE ar.id NOT IN (
@@ -145,6 +150,7 @@ WHERE ar.id NOT IN (
     WHERE a.release_year = 2020
 );
 
+-- Названия сборников, в которых присутствует конкретный исполнитель (выберите его сами)
 SELECT c.title AS collection_title
 FROM Collection c
 JOIN Collection_Track ct ON c.id = ct.collection_id
